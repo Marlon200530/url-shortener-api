@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
-import { createUserSchema} from '../schemas/user.schemas';
+import { createUserSchema, loginUserSchema} from '../schemas/user.schemas';
 import { AppError } from "../errors/AppError";
-import { createUserService } from "../services/user.service";
+import { createUserService, loginService } from "../services/user.service";
+import { generateAcessToken } from "../utils/generateAcessToken";
+
 
 
 export async function createUser(req : Request, res: Response) {
@@ -19,4 +21,23 @@ export async function createUser(req : Request, res: Response) {
             user
         }
     })
+}
+
+export async function login(req: Request, res: Response) {
+    const parsed = loginUserSchema.safeParse(req.body);
+
+    if (!parsed.success) throw new AppError("Dados Invalidos", 400);
+
+    const user = await loginService(parsed.data);
+
+    const token = generateAcessToken(user);
+
+    res.status(200).json({
+        success: "ok",
+        data: {
+            user,
+            access: token
+        }
+    })
+
 }

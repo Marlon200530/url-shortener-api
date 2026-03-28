@@ -1,4 +1,4 @@
-export type UrlEntity = {
+export type Url = {
   id: number
   originalUrl: string
   shortCode: string
@@ -9,11 +9,11 @@ export type UrlEntity = {
   userId: number
 }
 
-export type UserEntity = {
+export type User = {
     id: number
-    username: string
-    email: string
-    password: string
+    username: string 
+    email: string 
+    password: string 
 }
 
 
@@ -35,4 +35,4 @@ export type UserEntity = {
 // }
 
 
-export type PublicUser = Omit<UserEntity, "password">
+export type PublicUser = Omit<User, "password">

@@ -1,9 +1,14 @@
 import { prisma } from "../lib/prisma";
+import type { User } from "../types/types";
 
 type CreateUserRepoInput = {
   username: string;
   email: string;
   passwordHash: string;
+};
+
+type LoginUserRepoInput = {
+    email: string;
 };
 
 export async function createUser(data : CreateUserRepoInput) {
@@ -18,4 +23,17 @@ export async function createUser(data : CreateUserRepoInput) {
     })
 
     return user;
+}
+
+
+export async function login({ email }: LoginUserRepoInput): Promise<User | null> {
+    return prisma.user.findUnique({
+        where: { email },
+        select: {
+            id: true,
+            username: true,
+            email: true,
+            password: true
+        }
+    });
 }
