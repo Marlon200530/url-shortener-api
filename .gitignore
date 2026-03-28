@@ -6,3 +6,6 @@ logs/
 *.log
 coverage/
 .prisma/
+/generated/prisma
+
+/generated/prisma
