@@ -9,8 +9,7 @@ import { generateAcessToken } from "../utils/generateAcessToken";
 export async function createUser(req : Request, res: Response) {
     const parsed = createUserSchema.safeParse(req.body);
     if (!parsed.success) {
-        const validationMessages = parsed.error.issues.map((issue) => issue.message).join("; ");
-        throw new AppError(validationMessages || "Dados invalidos", 400);
+        throw new AppError("Dados invalidos", 400);
     }
 
     const user = await createUserService(parsed.data);
@@ -26,7 +25,7 @@ export async function createUser(req : Request, res: Response) {
 export async function login(req: Request, res: Response) {
     const parsed = loginUserSchema.safeParse(req.body);
 
-    if (!parsed.success) throw new AppError("Dados Invalidos", 400);
+    if (!parsed.success) throw new AppError("Dados invalidos", 400);
 
     const user = await loginService(parsed.data);
 

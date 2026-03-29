@@ -11,11 +11,9 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   const statusCode = err instanceof AppError ? err.statusCode : 500;
   const message = err instanceof AppError ? err.message : "Erro interno do servidor";
 
-  const payload: { error: string; stack?: string } = { error: message };
-
   if (!isProduction && err instanceof Error) {
-    payload.stack = err.stack;
+    console.error(err.stack ?? err.message);
   }
 
-  res.status(statusCode).json(payload);
+  res.status(statusCode).json({ error: message });
 };
