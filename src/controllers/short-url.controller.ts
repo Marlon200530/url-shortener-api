@@ -1,7 +1,7 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { createShortUrlSchema } from "../schemas/user.schemas";
-import { AppError } from "../errors/AppError";
-import { createShortUrlService } from "../services/short-url.service";
+import { AppError } from "../lib/errors/AppError";
+import { createShortUrlService, getUrlService } from "../services/short-url.service";
 import type { CustomRequest } from "../middlewares/authMiddleware";
 
 
@@ -28,4 +28,17 @@ export async function createShortUrl(req: CustomRequest, res: Response) {
       shortLink: `${baseUrl}/${shortUrl.shortCode}`,
     },
   });
+}
+
+
+export async function getUrl(req: Request, res: Response) {
+  const shortCodeParam = req.params.shortCode;
+  const shortCode = Array.isArray(shortCodeParam) ? shortCodeParam[0] : shortCodeParam;
+
+  if (!shortCode) {
+    throw new AppError("Short code invalido", 400);
+  }
+
+  const url = await getUrlService(shortCode);
+  return res.redirect(302, url.originalUrl);
 }

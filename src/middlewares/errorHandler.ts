@@ -1,5 +1,5 @@
 import type { ErrorRequestHandler, RequestHandler } from "express";
-import { AppError } from "../errors/AppError";
+import { AppError } from "../lib/errors/AppError";
 
 const isProduction = process.env.NODE_ENV === "production";
 

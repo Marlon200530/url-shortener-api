@@ -1,5 +1,5 @@
 import express from "express";
-import { createShortUrl } from "../controllers/short-url.controller";
+import { createShortUrl, getUrl } from "../controllers/short-url.controller";
 import { auth } from "../middlewares/authMiddleware";
 
 const router = express.Router();

@@ -3,7 +3,7 @@ import type { createUserInput, loginUserInput } from "../schemas/user.schemas";
 import type { PublicUser } from "../types/types";
 import { createUser, login } from "../repositories/user.repository";
 import { Prisma } from "../../generated/prisma/client";
-import { AppError } from "../errors/AppError";
+import { AppError } from "../lib/errors/AppError";
 
 const SALT_ROUNDS = 10;
 

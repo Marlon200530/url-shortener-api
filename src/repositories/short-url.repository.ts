@@ -15,6 +15,16 @@ export type CreatedShortUrlRepoResult = {
   createdAt: Date;
 };
 
+export type GetShortUrlRepoResult = {
+  id: number;
+  shortCode: string;
+  customAlias: string | null;
+  clickCount: number;
+  expiresAt: Date | null;
+  createdAt: Date;
+  originalUrl: string;
+};
+
 function generateShortCode(length = 7): string {
   const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let code = "";
@@ -79,4 +89,38 @@ export async function createShortUrl(data: CreateShortUrlRepoInput): Promise<Cre
   }
 
   throw lastError ?? new Error("FAILED_TO_GENERATE_SHORT_CODE");
+}
+
+export async function getUrl(shortCode: string): Promise<GetShortUrlRepoResult> {
+  const shortUrl = await prisma.shortUrl.update({
+    where: { shortCode },
+    data: {
+      clickCount: {
+        increment: 1,
+      },
+    },
+    select: {
+      id: true,
+      shortCode: true,
+      customAlias: true,
+      clickCount: true,
+      expiresAt: true,
+      createdAt: true,
+      url: {
+        select: {
+          originalUrl: true,
+        },
+      },
+    },
+  });
+
+  return {
+    id: shortUrl.id,
+    shortCode: shortUrl.shortCode,
+    customAlias: shortUrl.customAlias,
+    clickCount: shortUrl.clickCount,
+    expiresAt: shortUrl.expiresAt,
+    createdAt: shortUrl.createdAt,
+    originalUrl: shortUrl.url.originalUrl,
+  };
 }

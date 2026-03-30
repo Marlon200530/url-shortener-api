@@ -1,6 +1,6 @@
-import { createShortUrl } from "../repositories/short-url.repository";
+import { createShortUrl, getUrl } from "../repositories/short-url.repository";
 import { Prisma } from "../../generated/prisma/client";
-import { AppError } from "../errors/AppError";
+import { AppError } from "../lib/errors/AppError";
 import type { createShortUrlInput } from "../schemas/user.schemas";
 
 export async function createShortUrlService(data: createShortUrlInput, userId: number) {
@@ -29,3 +29,19 @@ export async function createShortUrlService(data: createShortUrlInput, userId: n
     throw error;
   }
 }
+
+
+export async function getUrlService(shortCode:string) {
+  try {
+    return await getUrl(shortCode);
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
+      throw new AppError("URL nao encontrada", 404);
+    }
+
+    throw error;
+  }
+}  

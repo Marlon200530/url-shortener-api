@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { createUserSchema, loginUserSchema} from '../schemas/user.schemas';
-import { AppError } from "../errors/AppError";
+import { AppError } from "../lib/errors/AppError";
 import { createUserService, loginService } from "../services/user.service";
 import { generateAcessToken } from "../utils/generateAcessToken";
 
@@ -15,7 +15,7 @@ export async function createUser(req : Request, res: Response) {
     const user = await createUserService(parsed.data);
 
     res.status(201).json({
-        success: "ok",
+        success: true,
         data: {
             user
         }
@@ -32,7 +32,7 @@ export async function login(req: Request, res: Response) {
     const token = generateAcessToken(user);
 
     res.status(200).json({
-        success: "ok",
+        success: true,
         data: {
             user,
             access: token
@@ -40,3 +40,6 @@ export async function login(req: Request, res: Response) {
     })
 
 }
+
+
+// 30/03/2026 - goal: criar a funcionalidade de redimencionar o short link para o link original

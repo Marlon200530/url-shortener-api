@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import type { JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import { AppError } from "../errors/AppError";
+import { AppError } from "../lib/errors/AppError";
 
 interface AuthPayload extends JwtPayload {
   userId: number;
